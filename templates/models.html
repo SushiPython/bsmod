@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block heading %}Beat Saber Models{% endblock %}
+{% block content %}<div id="items"><div id="load" class="loading loading-lg"></div></div>{% endblock %}
+{% block script %}
+  function createItem(data) {
+    $(`
+<div class="card text-center block" style="padding:1em;">
+  <div class="card-image p-center">
+    <img width=200 height=200 src="${data.thumbnail}" alt="No Picture Available">
+  </div>
+  <div class="card-header">
+    <div class="card-title h5">${data.name}</div>
+    <div class="card-subtitle text-gray">${data.author}</div>
+  </div>
+  <div class="card-body">
+    ${data.tags}
+  </div>
+  <div class="card-footer">
+    <button href="${data.download}" class="btn btn-primary">Download</button>
+  </div>
+</div>
+`).appendTo('#items');
+  }
+  $( document ).ready(function() {
+  fetch('/api/models?type=saber')
+  .then(response => response.json())
+  .then(data => {
+    $("#load").hide();
+    for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+        console.log(key + " -> " + data[key]);
+        createItem(data[key])
+    }
+}
+  })
+  });
+{% endblock %}

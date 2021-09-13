@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BSMod</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+</head>
+<body>
+<header class="navbar">
+  <section class="navbar-section">
+    <a href="/" class="btn btn-link">Home</a>
+    <a href="/maps" class="btn btn-link">Maps</a>
+    <a href="/models" class="btn btn-link">Models</a>
+  </section>
+  <section class="navbar-center">
+    <img src="/static/bsmod-logo.png" width=50 height=50 style="margin-top:10px">
+  </section>
+  <section class="navbar-section">
+    <a href="/maps" class="btn btn-link">Info</a>
+    <a href="#" class="btn btn-link">GitHub</a>
+  </section>
+</header>
+<div class="container">
+  <div class="text-center text-muted">
+    Beat Saber Modding
+  </div>
+    <div class="hero-sm bg-gray text-center">
+    <div class="hero-body">
+      <h1>{% block heading %}{% endblock %}</h1>
+    </div>
+  </div>
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>
+<script>
+  {% block script %}{% endblock %}
+</script>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block heading %}Beat Saber Maps{% endblock %}
+{% block content %}<div id="items"></div>{% endblock %}
+{% block script %}
+  function createItem(data) {
+    $(`
+<div class="card text-center block" style="padding:1em;">
+  <div class="card-image p-center">
+    <img src="${data.versions[0].coverURL}">
+  </div>
+  <div class="card-header">
+    <div class="card-title h5">${data.name}</div>
+    <div class="card-subtitle text-gray">${data.uploader.name}</div>
+  </div>
+  <div class="card-body">
+    ${data.description}
+  </div>
+  <div class="card-footer">
+    <button href="${data.versions[0].downloadURL}" class="btn btn-primary">Download</button>
+  </div>
+</div>
+`).appendTo('#items');
+  }
+  $( document ).ready(function() {
+  fetch('/api/maps?page=1&sort=plays')
+  .then(response => response.json())
+  .then(data => {
+    for (var key in data.docs) {
+    if (data.docs.hasOwnProperty(key)) {
+        console.log(key + " -> " + data.docs[key]);
+        createItem(data.docs[key])
+    }
+}
+  })
+  });
+{% endblock %}
