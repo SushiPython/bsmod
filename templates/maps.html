@@ -1,10 +1,43 @@
 {% extends "base.html" %}
 {% block heading %}Beat Saber Maps{% endblock %}
-{% block content %}<div id="items"></div>{% endblock %}
+{% block content %}
+
+<div class="input-group">
+  <label class="form-checkbox form-inline">
+    <input id="noodle" type="checkbox"><i class="form-icon"></i> Noodle
+  </label>
+  <label class="form-checkbox form-inline">
+    <input id="chroma" type="checkbox"><i class="form-icon"></i> Chroma
+  </label>
+  <label class="form-checkbox form-inline">
+    <input id="ranked" type="checkbox"><i class="form-icon"></i> Ranked
+  </label>
+  <div class="form-group">
+  <select id="sort" class="form-select">
+    <option value="Rating">Rating</option>
+    <option value="Latest">Latest</option>
+    <option value="Relevance">Relevance</option>
+  </select>
+</div>
+  <input id="searchquery" type="text" class="form-input" placeholder="Search">
+  <button id="submit" class="btn input-group-btn">Search</button>
+</div>
+
+<div id="items" class="columns"></div>{% endblock %}
 {% block script %}
-  var pageNum = 1;
+<script>
+  
+  var pageNum = 0;
+  var currentUrl = '/api/maps?page='+pageNum.toString()+'&sort=Rating';
+
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+
   function loadPage(page) {
-  fetch('/api/maps?page='+page.toString()+'&sort=plays')
+  fetch(currentUrl = '/api/maps?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&chroma='+ document.getElementById("chroma").checked+'&noodle='+ document.getElementById("noodle").checked+'&ranked='+ document.getElementById("ranked").checked+'&query='+$("#searchquery").val())
   .then(response => response.json())
   .then(data => {
     for (var key in data.docs) {
@@ -15,33 +48,57 @@
   }
   })
   }
-  function createItem(data) {
-    $(`
-<div class="card text-center block cextra">
-  <div class="card-image p-center">
-    <img src="${data.versions[0].coverURL}">
-  </div>
-  <div class="card-header">
-    <div class="card-title h5">${data.name}</div>
-    <div class="card-subtitle">${data.uploader.name}</div>
-  </div>
-  <div class="card-body">
-    Released:
-  </div>
-  <div class="card-footer">
-    <button href="${data.versions[0].downloadURL}" class="btn btn-link">Download</button>
-  </div>
-</div>
-`).appendTo('#items');
-  }
-  $( document ).ready(function() {
+
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
     loadPage(pageNum);
-    pageNum = pageNum + 1;
-  });
-  $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() == $(document).height()) {
-     loadPage(pageNum);
-     pageNum = pageNum + 1;
+    pageNum++;
+    console.log('end')
    }
 });
+
+
+
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img src="${data.versions[0].coverURL}">
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.name}</div>
+          <div class="card-subtitle">${data.uploader.name}</div>
+        </div>
+        <div class="card-body">
+          <span style="color:gray">Uploaded: </span> ${timeToDate(data.uploaded)}<br>
+          <span style="color:gray">Downloads: </span> ${data.stats.downloads}<br>
+          <span style="color:gray">Votes: </span>${data.stats.upvotes}/${data.stats.downvotes}
+        </div>
+        <div class="card-footer">
+          <a href="${data.versions[0].downloadURL}" class="btn btn-link">Download</a>
+          <a href="beatsaver://${data.id}" class="btn btn-link">OneClick</a>
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  loadPage(pageNum);
+  pageNum++;
+})
+
+
+
+
+
+</script>
 {% endblock %}

@@ -15,10 +15,13 @@ def apimaps():
   sort = request.args.get('sort')
   page = request.args.get('page')
   query = request.args.get('query')
+  chroma = request.args.get('chroma')
+  ranked = request.args.get('ranked')
+  noodle = request.args.get('noodle')
   if query is None:
     req_url = f"https://api.beatsaver.com/search/text/{page}?sortOrder={sort}"
   else:
-    req_url = f"https://api.beatsaver.com/search/text/{page}?q={query}&sortOrder={sort}"
+    req_url = f"https://api.beatsaver.com/search/text/{page}?q={query}&sortOrder={sort}&chroma={chroma}&noodle={noodle}&ranked={ranked}"
   print(req_url)
   return requests.get(req_url).json()
 

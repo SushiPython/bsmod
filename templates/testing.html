@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block heading %}Beat Saber Maps{% endblock %}
 {% block content %}
-<div style="width:100%;" class="p-center">
-<div class="input-group" style="width: 50%;">
+
+<div class="input-group">
   <div class="form-group">
   <select id="sort" class="form-select">
     <option value="Rating">Rating</option>
@@ -11,9 +11,9 @@
   </select>
 </div>
   <input id="searchquery" type="text" class="form-input" placeholder="Search">
-  <button id="submit" class="btn btn-primary input-group-btn">Search</button>
+  <button id="submit" class="btn input-group-btn">Search</button>
 </div>
-</div>
+
 <div id="items" class="columns"></div>{% endblock %}
 {% block script %}
 <script>
@@ -28,7 +28,7 @@
 
 
   function loadPage(page) {
-  fetch(currentUrl)
+  fetch(currentUrl = '/api/maps?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val())
   .then(response => response.json())
   .then(data => {
     for (var key in data.docs) {
@@ -40,13 +40,14 @@
   })
   }
 
-  $(window).scroll(function() {
-   if($(window).scrollTop() + window.innerHeight == $(document).height()) {
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
     loadPage(pageNum);
-    pageNum = pageNum + 1;
+    pageNum++;
     console.log('end')
    }
 });
+
 
 
   function createItem(data) {
@@ -82,17 +83,8 @@ $( document ).ready(function() {
 $("#submit").click(function() {
   document.getElementById('items').innerHTML = "";
   pageNum = 0;
-  currentUrl = '/api/maps?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val()
-  fetch(currentUrl)
-  .then(response => response.json())
-  .then(data => {
-    for (var key in data.docs) {
-    if (data.docs.hasOwnProperty(key)) {
-        console.log(key + " -> " + data.docs[key]);
-        createItem(data.docs[key])
-    }
-  }
-  })
+  loadPage(pageNum);
+  pageNum++;
 })
 
 

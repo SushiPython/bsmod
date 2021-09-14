@@ -2,6 +2,7 @@
 {% block heading %}Beat Saber Models{% endblock %}
 {% block content %}<div id="items"><div id="load" class="loading loading-lg"></div></div>{% endblock %}
 {% block script %}
+<script>
   function createItem(data) {
     $(`
 <div class="card text-center block" style="padding:1em;">
@@ -34,4 +35,5 @@
 }
   })
   });
+  </script>
 {% endblock %}
