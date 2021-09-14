@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block heading %}Beat Saber Maps{% endblock %}
+{% block content %}
+<div style="width:100%;" class="p-center">
+<div class="input-group" style="width: 50%;">
+  <div class="form-group">
+  <select id="sort" class="form-select">
+    <option value="Rating">Rating</option>
+    <option value="Latest">Latest</option>
+    <option value="Relevance">Relevance</option>
+  </select>
+</div>
+  <input id="searchquery" type="text" class="form-input" placeholder="Search">
+  <button id="submit" class="btn btn-primary input-group-btn">Search</button>
+</div>
+</div>
+<div id="items" class="columns"></div>{% endblock %}
+{% block script %}
+<script>
+  
+  var pageNum = 0;
+  var currentUrl = '/api/maps?page='+pageNum.toString()+'&sort=Rating';
+
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+
+  function loadPage(page) {
+  fetch(currentUrl)
+  .then(response => response.json())
+  .then(data => {
+    for (var key in data.docs) {
+    if (data.docs.hasOwnProperty(key)) {
+        console.log(key + " -> " + data.docs[key]);
+        createItem(data.docs[key])
+    }
+  }
+  })
+  }
+
+  $(window).scroll(function() {
+   if($(window).scrollTop() + window.innerHeight == $(document).height()) {
+    loadPage(pageNum);
+    pageNum = pageNum + 1;
+    console.log('end')
+   }
+});
+
+
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img src="${data.versions[0].coverURL}">
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.name}</div>
+          <div class="card-subtitle">${data.uploader.name}</div>
+        </div>
+        <div class="card-body">
+          <span style="color:gray">Uploaded: </span> ${timeToDate(data.uploaded)}<br>
+          <span style="color:gray">Downloads: </span> ${data.stats.downloads}<br>
+          <span style="color:gray">Votes: </span>${data.stats.upvotes}/${data.stats.downvotes}
+        </div>
+        <div class="card-footer">
+          <a href="${data.versions[0].downloadURL}" class="btn btn-link">Download</a>
+          <a href="beatsaber://${data.id}" class="btn btn-link">OneClick</a>
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  currentUrl = '/api/maps?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val()
+  fetch(currentUrl)
+  .then(response => response.json())
+  .then(data => {
+    for (var key in data.docs) {
+    if (data.docs.hasOwnProperty(key)) {
+        console.log(key + " -> " + data.docs[key]);
+        createItem(data.docs[key])
+    }
+  }
+  })
+})
+
+
+
+
+
+</script>
+{% endblock %}

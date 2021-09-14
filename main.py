@@ -12,12 +12,15 @@ def main():
 
 @app.route('/api/maps')
 def apimaps():
-	sort = request.args.get('sort')
-	page = request.args.get('page')
-	if sort == "plays":
-		return requests.get("https://api.beatsaver.com/maps/plays/"+page).text
-	elif sort == "latest":
-		return requests.get("https://api.beatsaver.com/maps/latest").text
+  sort = request.args.get('sort')
+  page = request.args.get('page')
+  query = request.args.get('query')
+  if query is None:
+    req_url = f"https://api.beatsaver.com/search/text/{page}?sortOrder={sort}"
+  else:
+    req_url = f"https://api.beatsaver.com/search/text/{page}?q={query}&sortOrder={sort}"
+  print(req_url)
+  return requests.get(req_url).json()
 
 
 @app.route('/api/models')
@@ -39,6 +42,9 @@ def maps():
 def models():
   return render_template('models.html')
 
+@app.route('/testing')
+def testing():
+  return render_template('testing.html')
   
 app.run(host='0.0.0.0', port=8080)
 

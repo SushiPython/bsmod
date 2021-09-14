@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+  <link rel="stylesheet" href="/static/spectre.css">
   <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BSMod</title>
@@ -20,8 +19,8 @@
     <img src="/static/bsmod-logo.png" width=50 height=50 style="margin-top:10px">
   </section>
   <section class="navbar-section">
-    <a href="/maps" class="btn btn-link">Info</a>
-    <a href="#" class="btn btn-link">GitHub</a>
+    <a href="/info" class="btn btn-link">Info</a>
+    <a href="https://github.com/SushiPython/bsmod" class="btn btn-link">GitHub</a>
   </section>
 </header>
 <div class="container">
@@ -37,6 +36,18 @@
 </div>
 </body>
 </html>
-<script>
-  {% block script %}{% endblock %}
-</script>
+{% block script %}{% endblock %}
+<style>
+  .cextra {
+    margin:1em;
+    padding:1em;
+    background:#011627;
+    color: #FDFFFC;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.12),0 2px 2px rgba(0,0,0,0.12),0 4px 4px rgba(0,0,0,0.12),0 8px 8px rgba(0,0,0,0.12),0 16px 16px rgba(0,0,0,0.12);
+  }
+  .homepanel { 
+    width: 50%;
+  }
+</style>
