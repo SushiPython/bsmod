@@ -2,7 +2,7 @@
 All-in-one beat saber modding website!
 
 
-![Logo][static/bsmod-logo.png]
+![Logo][/static/bsmod-logo.png]
 My goal is to combine ModelSaber, BeatSaver, and some guides into a simple, easy to use webite.
 
 
@@ -14,4 +14,4 @@ TODO:
 - Basically all of the models section
 - Qosmetics integration with models somehow???
 
-![Screenshot][firefox_aNpB62awyw.png]
+![Screenshot][/firefox_aNpB62awyw.png]
