@@ -14,6 +14,7 @@ My goal is to combine ModelSaber, BeatSaver, and some guides into a simple, easy
 - Qosmetics integration with models somehow???
 - Remove time of map (only date) after 1 day
 - Click on models and maps for its own page with more data
+- Mods page with beatmods api
 
 ## Future small ui/qol Changes:
 - Remove time of map (only date) after 1 day

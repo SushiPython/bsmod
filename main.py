@@ -50,7 +50,11 @@ def models():
 @app.route('/testing')
 def testing():
   return render_template('testing.html')
-  
+
+@app.route('/info')
+def info():
+  return render_template('info.html')
+
 @app.route('/api/saberimg')
 def saberimg():
   id = request.args.get('id')
