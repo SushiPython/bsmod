@@ -51,6 +51,14 @@ def apiscoresaber():
   return r.json()
 
 
+@app.route('/api/downloadscoresaber')
+def downloadscoresaber():
+  url = f"https://beatsaver.com/api/search/text/0?q={request.args.get('name')}&minBpm={request.args.get('bpm')}&maxBpm={request.args.get('bpm')}"
+  r = requests.get(url)
+  id = r.json()['docs'][0]['id']
+  print(id)
+  return 'beatsaver://'+id
+
 @app.route('/maps')
 def maps():
   return render_template('maps.html')

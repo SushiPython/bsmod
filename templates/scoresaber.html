@@ -18,6 +18,12 @@
     <option value="4">Mapper</option>
   </select>
 </div>
+  <div class="form-group">
+  <select id="sortorder" class="form-select">
+    <option value="0">Ascending</option>
+    <option value="1">Descending</option>
+  </select>
+</div>
   <input id="searchquery" type="text" class="form-input" placeholder="Search">
   <button id="submit" class="btn input-group-btn">Search</button>
 </div>
@@ -49,14 +55,21 @@
   })
   }
 
-$(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
-    loadPage(pageNum);
-    pageNum++;
-    console.log('end')
-   }
-});
-
+  $(window).scroll(function() {
+    if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+      loadPage(pageNum);
+      pageNum++;
+      console.log('end')
+    }
+  });
+  function oneClick(url, bpm) {
+    fetch('/api/downloadscoresaber?name='+url+'&bpm='+bpm)
+    .then(response => response.text())
+    .then(data => {
+      console.log(data);
+      window.location = data;
+    })
+  }
 
 
   function createItem(data) {
@@ -73,6 +86,9 @@ $(window).scroll(function() {
           <span style="color:gray">BPM: </span> ${data.bpm}<br>
           <span style="color:gray">Scores: </span> ${data.scores}<br>
           <span style="color:gray">Stars: </span>${data.stars}
+        </div>
+        <div class="card-footer">
+          <a onclick="oneClick('${data.name}','${data.bpm}')" class="btn btn-link">OneClick</a>
         </div>
       </div>
     `).appendTo('#items');
