@@ -1,13 +1,34 @@
 from flask import Flask, render_template, request
 import requests
-
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
+soup = BeautifulSoup(requests.get('https://www.questboard.xyz/').text, 'html.parser')
+news = soup.find(id='News')
+daytexts = news.find_all(id='daytext')
+newstexts = news.find_all(id='newstext')
+newsjson = {}
+for i in range(0, len(daytexts)):
+  newsjson[i] = {
+    "date": daytexts[i].getText(),
+    "content": newstexts[i].getText()
+  }
+
+
+
+
+
+@app.route('/api/noticeboard')
+def noticeboard():
+  return newsjson
 
 @app.route('/')
 def main():
-  return render_template('index.html')
+  out_html = ''
+  for item in newsjson:
+    out_html += f'<span><strong>{newsjson[item]["date"]}:</strong> {newsjson[item]["content"]}</span><br><hr>'
+  return render_template('index.html', board=out_html)
 
 
 @app.route('/api/maps')

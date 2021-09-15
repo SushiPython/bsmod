@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block heading %}Homepage{% endblock %}
 {% block content %}
+    <div class="columns">
+    <div style="padding-bottom:2em;height:250px;overflow:auto;" class="column text-center text-large cextra">
+      <span style="font-size:50px">Noticeboard from QuestBoard</span><br>
+      {{board|safe}}
+    </div>
+  </div>
   <div class="columns">
     <div class="column text-center text-large cextra">
       <span style="font-size:50px">Quest Modding Guides</span>
@@ -31,6 +37,7 @@
       <span style="font-size:50px">Credits</span><br>
       <span><strong>BeatSaver:</strong> Maps List + Maps API</span><br>
       <span><strong>ModelSaber:</strong> Models List + Models API</span><br>
+      <span><strong>ScoreSaber:</strong> Ranking</span><br>
       <span><strong>Beat Mods [SOON]:</strong> Mods List + Mods API</span><br>
       <span><strong>SushiPython:</strong> Development</span>
     </div>
