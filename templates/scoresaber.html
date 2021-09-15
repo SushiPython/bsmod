@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block heading %}ScoreSaber{% endblock %}
+{% block content %}
+
+<div class="input-group">
+  <label class="form-checkbox form-inline">
+    <input id="verified" type="checkbox"><i class="form-icon"></i> Verified
+  </label>
+  <label class="form-checkbox form-inline">
+    <input id="ranked" type="checkbox"><i class="form-icon"></i> Ranked
+  </label>
+  <div class="form-group">
+  <select id="sort" class="form-select">
+    <option value="0">Trending</option>
+    <option value="1">Date Ranked</option>
+    <option value="2">Popularity</option>
+    <option value="3">Difficulty</option>
+    <option value="4">Mapper</option>
+  </select>
+</div>
+  <input id="searchquery" type="text" class="form-input" placeholder="Search">
+  <button id="submit" class="btn input-group-btn">Search</button>
+</div>
+
+<div id="items" class="columns"></div>{% endblock %}
+{% block script %}
+<script>
+  
+  var pageNum = 0;
+  currentUrl = '';
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+
+  function loadPage(page) {
+  currentUrl = '/api/scoresaber?page='+pageNum.toString()+'&cat='+$("#sort").val();
+  fetch(currentUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log('execute')
+    for (var key in data.songs) {
+    if (data.songs.hasOwnProperty(key)) {
+        console.log(key + " -> " + data.songs[key]);
+        createItem(data.songs[key])
+    }
+  }
+  })
+  }
+
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+    loadPage(pageNum);
+    pageNum++;
+    console.log('end')
+   }
+});
+
+
+
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img height=200 width=200 src="https://scoresaber.com${data.image}">
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.name} - ${data.songAuthorName}</div>
+          <div class="card-subtitle">${data.levelAuthorName}</div>
+        </div>
+        <div class="card-body">
+          <span style="color:gray">BPM: </span> ${data.bpm}<br>
+          <span style="color:gray">Scores: </span> ${data.scores}<br>
+          <span style="color:gray">Stars: </span>${data.stars}
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  loadPage(pageNum);
+  pageNum++;
+})
+
+
+
+
+
+</script>
+{% endblock %}

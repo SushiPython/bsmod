@@ -32,13 +32,25 @@ def apimodels():
   query = request.args.get('query')
   page = int(request.args.get('page'))
   modeltype = request.args.get('type')
-  req_url = f'https://modelsaber.com/api/v2/get.php?type={modeltype}&sort={sort}&filter={query}&start={page*25}&end={(page+1)*25}'
+  req_url = f'https://modelsaber.com/api/v2/get.php?type={modeltype}&sort={sort}&filter={query}&start={page*25}&end={(page+1)*28}'
+  print(req_url)
+  r = requests.get(req_url)
+  return r.json()
+
+@app.route('/scoresaber')
+def scoresaber():
+  return render_template('scoresaber.html')
+
+@app.route('/api/scoresaber')
+def apiscoresaber():
+  page = int(request.args.get('page'))+1
+  cat = request.args.get('cat')
+  req_url = f'http://scoresaber.com/api.php?function=get-leaderboards&cat={cat}&page={page}&limit=14'
   print(req_url)
   r = requests.get(req_url)
   return r.json()
 
 
-	
 @app.route('/maps')
 def maps():
   return render_template('maps.html')
@@ -51,9 +63,6 @@ def models():
 def testing():
   return render_template('testing.html')
 
-@app.route('/info')
-def info():
-  return render_template('info.html')
 
 @app.route('/api/saberimg')
 def saberimg():
