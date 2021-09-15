@@ -1,29 +1,44 @@
 {% extends "base.html" %}
 {% block heading %}Beat Saber Models{% endblock %}
-{% block content %}<div id="items"><div id="load" class="loading loading-lg"></div></div>{% endblock %}
+{% block content %}
+
+<div class="input-group">
+  <div class="form-group">
+  <select id="sort" class="form-select">
+    <option value="date">Latest</option>
+    <option value="name">Name</option>
+    <option value="author">Author</option>
+  </select>
+</div>
+  <div class="form-group">
+  <select id="sortmodel" class="form-select">
+    <option value="all">All</option>
+    <option value="saber">Saber</option>
+    <option value="bloq">Blocks</option>
+    <option value="platform">Platforms</option>
+    <option value="avatar">Avatar</option>
+  </select>
+</div>
+  <input id="searchquery" type="text" class="form-input" placeholder="Search">
+  <button id="submit" class="btn input-group-btn">Search</button>
+</div>
+
+<div id="items" class="columns"></div>{% endblock %}
 {% block script %}
 <script>
-  function createItem(data) {
-    $(`
-<div class="card text-center block" style="padding:1em;">
-  <div class="card-image p-center">
-    <img width=200 height=200 src="${data.thumbnail}" alt="No Picture Available">
-  </div>
-  <div class="card-header">
-    <div class="card-title h5">${data.name}</div>
-    <div class="card-subtitle text-gray">${data.author}</div>
-  </div>
-  <div class="card-body">
-    ${data.tags}
-  </div>
-  <div class="card-footer">
-    <button href="${data.download}" class="btn btn-primary">Download</button>
-  </div>
-</div>
-`).appendTo('#items');
+  
+  var pageNum = 0;
+  var currentUrl = '/api/models?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
+
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
   }
-  $( document ).ready(function() {
-  fetch('/api/models?type=saber')
+
+
+  function loadPage(page) {
+  currentUrl = '/api/models?page='+pageNum.toString()+'&type='+$("#sortmodel").val()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
+  fetch(currentUrl)
   .then(response => response.json())
   .then(data => {
     $("#load").hide();
@@ -34,6 +49,65 @@
     }
 }
   })
-  });
-  </script>
+  }
+
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+    loadPage(pageNum);
+    pageNum++;
+    console.log('end')
+   }
+});
+
+
+  function fiximg(img, type, thumbnail) {
+    if (img.src != '/static/nip.png' && type != 'bloq') {
+      img.src = '/static/nip.png';
+    }
+    if (type == 'bloq') {
+      img.src = thumbnail;
+    }
+  }
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img alt="Saber Thumbnail" onerror="fiximg(this,'${data.type}', '${data.thumbnail}');" width=200 height=200 src="https://modelsaber.com/files/${data.type}/${data.id}/${data.thumbnail}">
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.name}</div>
+          <div class="card-subtitle">${data.author}</div>
+        </div>
+        <div class="card-body">
+          <span style="color:gray">Uploaded: </span> ${data.date}<br>
+          <span style="color:gray">ID: </span> ${data.id}<br>
+          <span style="color:gray">Tags: </span>${data.tags}
+        </div>
+        <div class="card-footer">
+          <a href="${data.download}" class="btn btn-link">Download</a>
+          <a href="${data.install_link}" class="btn btn-link">OneClick</a>
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  loadPage(pageNum);
+  pageNum++;
+})
+
+
+
+
+
+</script>
 {% endblock %}

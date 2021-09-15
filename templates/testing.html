@@ -1,13 +1,22 @@
 {% extends "base.html" %}
-{% block heading %}Beat Saber Maps{% endblock %}
+{% block heading %}Beat Saber Models{% endblock %}
 {% block content %}
 
 <div class="input-group">
   <div class="form-group">
   <select id="sort" class="form-select">
-    <option value="Rating">Rating</option>
-    <option value="Latest">Latest</option>
-    <option value="Relevance">Relevance</option>
+    <option value="date">Latest</option>
+    <option value="name">Name</option>
+    <option value="author">Author</option>
+  </select>
+</div>
+  <div class="form-group">
+  <select id="sortmodel" class="form-select">
+    <option value="all">All</option>
+    <option value="saber">Saber</option>
+    <option value="bloq">Blocks</option>
+    <option value="platform">Platforms</option>
+    <option value="avatar">Avatar</option>
   </select>
 </div>
   <input id="searchquery" type="text" class="form-input" placeholder="Search">
@@ -19,7 +28,7 @@
 <script>
   
   var pageNum = 0;
-  var currentUrl = '/api/maps?page='+pageNum.toString()+'&sort=Rating';
+  var currentUrl = '/api/models?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
 
   function timeToDate(item) {
     var newDate = Date.parse(item);
@@ -28,15 +37,17 @@
 
 
   function loadPage(page) {
-  fetch(currentUrl = '/api/maps?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val())
+  currentUrl = '/api/models?page='+pageNum.toString()+'&type='+$("#sortmodel").val()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
+  fetch(currentUrl)
   .then(response => response.json())
   .then(data => {
-    for (var key in data.docs) {
-    if (data.docs.hasOwnProperty(key)) {
-        console.log(key + " -> " + data.docs[key]);
-        createItem(data.docs[key])
+    $("#load").hide();
+    for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+        console.log(key + " -> " + data[key]);
+        createItem(data[key])
     }
-  }
+}
   })
   }
 
@@ -49,25 +60,32 @@ $(window).scroll(function() {
 });
 
 
-
+  function fiximg(img, type, thumbnail) {
+    if (img.src != '/static/nip.png' && type != 'bloq') {
+      img.src = '/static/nip.png';
+    }
+    if (type == 'bloq') {
+      img.src = thumbnail;
+    }
+  }
   function createItem(data) {
     $(`
       <div class="card text-center block cextra column">
         <div class="card-image p-center">
-          <img src="${data.versions[0].coverURL}">
+          <img alt="Saber Thumbnail" onerror="fiximg(this,'${data.type}', '${data.thumbnail}');" width=200 height=200 src="https://modelsaber.com/files/${data.type}/${data.id}/${data.thumbnail}">
         </div>
         <div class="card-header">
           <div class="card-title h5">${data.name}</div>
-          <div class="card-subtitle">${data.uploader.name}</div>
+          <div class="card-subtitle">${data.author}</div>
         </div>
         <div class="card-body">
-          <span style="color:gray">Uploaded: </span> ${timeToDate(data.uploaded)}<br>
-          <span style="color:gray">Downloads: </span> ${data.stats.downloads}<br>
-          <span style="color:gray">Votes: </span>${data.stats.upvotes}/${data.stats.downvotes}
+          <span style="color:gray">Uploaded: </span> ${data.date}<br>
+          <span style="color:gray">ID: </span> ${data.id}<br>
+          <span style="color:gray">Tags: </span>${data.tags}
         </div>
         <div class="card-footer">
-          <a href="${data.versions[0].downloadURL}" class="btn btn-link">Download</a>
-          <a href="beatsaber://${data.id}" class="btn btn-link">OneClick</a>
+          <a href="${data.download}" class="btn btn-link">Download</a>
+          <a href="${data.install_link}" class="btn btn-link">OneClick</a>
         </div>
       </div>
     `).appendTo('#items');

@@ -28,13 +28,15 @@ def apimaps():
 
 @app.route('/api/models')
 def apimodels():
-	notType = request.args.get('type') 
-	id = request.args.get('id')
-	if id:
-		r = requests.get("https://modelsaber.com/api/v2/get.php?type="+notType).json()
-		return r[id]
-	else:
-		return requests.get("https://modelsaber.com/api/v2/get.php?start=1&end=25&type="+notType).text
+  sort = request.args.get('sort')
+  query = request.args.get('query')
+  page = int(request.args.get('page'))
+  modeltype = request.args.get('type')
+  req_url = f'https://modelsaber.com/api/v2/get.php?type={modeltype}&sort={sort}&filter={query}&start={page*25}&end={(page+1)*25}'
+  print(req_url)
+  r = requests.get(req_url)
+  return r.json()
+
 
 	
 @app.route('/maps')
@@ -49,5 +51,22 @@ def models():
 def testing():
   return render_template('testing.html')
   
+@app.route('/api/saberimg')
+def saberimg():
+  id = request.args.get('id')
+  data = 'empty'
+  png = requests.get(f'https://modelsaber.com/files/saber/{id}/image.png')
+  if png.status_code == 200:
+    data = png.raw
+  jpg = requests.get(f'https://modelsaber.com/files/saber/{id}/image.jpg')
+  if jpg.status_code == 200:
+    data = jpg.raw
+  gif = requests.get(f'https://modelsaber.com/files/saber/{id}/image.gif')
+  if gif.status_code == 200:
+    data = gif.raw
+  print(data)
+  return data
+
+
 app.run(host='0.0.0.0', port=8080)
 
