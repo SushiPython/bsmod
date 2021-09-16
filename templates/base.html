@@ -7,6 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BSMod</title>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <title>Website Name</title>
+    <meta content="BSMod" property="og:title" />
+    <meta content="Beat Saber Maps, Models, Rankings, and more all in one place!" property="og:description" />
+    <meta content="https://bsm.sushipython.us" property="og:url" />
+    <meta content="https://bsm.sushipython.us/static/bsmod-logo.png" property="og:image" />
+    <meta content="#43B581" data-react-helmet="true" name="theme-color" />
 </head>
 <body>
 <header class="navbar">
@@ -33,7 +39,7 @@
       <h1>{% block heading %}{% endblock %}</h1>
     </div>
   </div>
-  {% block content %}{% endblock %}
+  {% block content %}{% endblock %}<div style="text-align:center"><div class="loading loading-lg"></div>This may take a bit due to ratelimits...</div>
 </div>
 </body>
 </html>

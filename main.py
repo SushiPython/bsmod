@@ -19,20 +19,36 @@ for i in range(0, len(daytexts)):
 
 @app.route('/api/ssscrape')
 def ssscrape():
+  PHPSESSID = requests.get('https://scoresaber.com').cookies['PHPSESSID']
   cat = request.args.get('cat')
   sort = request.args.get('sort')
-  star = request.args.get('minstar')
-  star1 = request.args.get('maxstar')
+  star = request.args.get('maxStar')
+  star1 = request.args.get('minStar')
   page = request.args.get('page')
-  PHPSESSID = 'mggndihftvv7rr6hm1srvt9u9l'
+  verified = request.args.get('verified')
+  ranked = request.args.get('ranked')
+  if verified == 'true':
+    verified = '1'
+  if ranked == 'true':
+    ranked = '1'
+  if ranked == 'false':
+    ranked = '0'
+  if verified == 'false':
+    verified = '0'
   cookie_dict = {
-    'dark': '0',
     'cat': cat,
+    'dark': '0',
     'sort': sort,
     'star': star,
     'star1': star1,
-    'PHPSESSID': PHPSESSID
+    'PHPSESSID': PHPSESSID,
+    'verified': verified,
+    'ranked': ranked
   }
+  req_u_1 = f'https://scoresaber.com/imports/user-setting.php?verified={verified}&ranked={ranked}&sort={sort}&cat={cat}&star={star}&star1={star1}'
+  print(req_u_1)
+  requests.get(req_u_1)
+  print(cookie_dict)
   html = requests.get('https://scoresaber.com?page='+page, cookies=cookie_dict).text
   soup = BeautifulSoup(html, 'html.parser')
   songs = soup.find('tbody')
@@ -45,7 +61,7 @@ def ssscrape():
       "difficulty": songs[i].find("td", class_="difficulty").getText().strip(),
       "author": songs[i].find("td", class_="author").find('a').getText().strip(),
       "total_plays": songs[i].find("td", class_="scores").getText().strip(),
-      "24hr_plays": songs[i].find("td", class_="percentage").getText().strip(),
+      "plays_pastday": songs[i].find("td", class_="percentage").getText().strip(),
       "stars": songs[i].find("td", class_="stars").getText().strip()
     }
 

@@ -44,6 +44,7 @@
     $("#load").hide();
     for (var key in data) {
     if (data.hasOwnProperty(key)) {
+      going = false;
         console.log(key + " -> " + data[key]);
         createItem(data[key])
     }
@@ -51,14 +52,15 @@
   })
   }
 
+var going = false;
 $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 0 && going==false) {
+    going = true;
     loadPage(pageNum);
     pageNum++;
     console.log('end')
    }
 });
-
 
   function fiximg(img, type, thumbnail) {
     if (img.src != '/static/nip.png' && type != 'bloq') {

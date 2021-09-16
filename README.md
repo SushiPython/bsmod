@@ -10,7 +10,6 @@ My goal is to combine ModelSaber, BeatSaver, and some guides into a simple, easy
 ![BSM Logo](/static/bsmod-logo.png)
 
 ## TODO:
-- Finish scoresaber scraper (almost done I think)
 - Qosmetics integration with models somehow???
 - Remove time of map (only date) after 1 day
 - Click on models and maps for its own page with more data

@@ -42,15 +42,17 @@
   .then(data => {
     for (var key in data.docs) {
     if (data.docs.hasOwnProperty(key)) {
+      going = false;
         console.log(key + " -> " + data.docs[key]);
         createItem(data.docs[key])
     }
   }
   })
   }
-
+var going = false;
 $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 0 && going==false) {
+    going = true;
     loadPage(pageNum);
     pageNum++;
     console.log('end')

@@ -2,7 +2,7 @@
 {% block heading %}ScoreSaber{% endblock %}
 {% block content %}
 
-<div class="input-group">
+<div class="input-group" style="margin-left: auto;margin-right: auto;width:50%">
   <label class="form-checkbox form-inline">
     <input id="verified" type="checkbox"><i class="form-icon"></i> Verified
   </label>
@@ -20,19 +20,18 @@
 </div>
   <div class="form-group">
   <select id="sortorder" class="form-select">
-    <option value="0">Ascending</option>
-    <option value="1">Descending</option>
+    <option value="desc">Descending</option>
+    <option value="asc">Ascending</option>
   </select>
 </div>
-  <input id="searchquery" type="text" class="form-input" placeholder="Search">
-  <button id="submit" class="btn input-group-btn">Search</button>
+  <button style="width: 2em;"id="submit" class="btn input-group-btn">Search</button>
 </div>
 
 <div id="items" class="columns"></div>{% endblock %}
 {% block script %}
 <script>
   
-  var pageNum = 0;
+  var pageNum = 1;
   currentUrl = '';
   function timeToDate(item) {
     var newDate = Date.parse(item);
@@ -41,27 +40,29 @@
 
 
   function loadPage(page) {
-  currentUrl = '/api/scoresaber?page='+pageNum.toString()+'&cat='+$("#sort").val();
+  currentUrl = `https://bsm.sushipython.us/api/ssscrape?page=${page.toString()}&cat=${$("#sort").val()}&sort=${$("#sortorder").val()}&minStar=0&maxStar=20&verified=${$("#verified").is(':checked')}&ranked=${$("#ranked").is(':checked')}`
   fetch(currentUrl)
   .then(response => response.json())
   .then(data => {
     console.log('execute')
-    for (var key in data.songs) {
-    if (data.songs.hasOwnProperty(key)) {
-        console.log(key + " -> " + data.songs[key]);
-        createItem(data.songs[key])
+    for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      going = false;
+        console.log(key + " -> " + data[key]);
+        createItem(data[key])
     }
   }
   })
   }
-
-  $(window).scroll(function() {
-    if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
-      loadPage(pageNum);
-      pageNum++;
-      console.log('end')
-    }
-  });
+var going = false;
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 0 && going==false) {
+    going = true;
+    loadPage(pageNum);
+    pageNum++;
+    console.log('end')
+   }
+});
   function oneClick(url, bpm) {
     fetch('/api/downloadscoresaber?name='+url+'&bpm='+bpm)
     .then(response => response.text())
@@ -71,7 +72,6 @@
     })
   }
 
-
   function createItem(data) {
     $(`
       <div class="card text-center block cextra column">
@@ -79,12 +79,12 @@
           <img height=200 width=200 src="https://scoresaber.com${data.image}">
         </div>
         <div class="card-header">
-          <div class="card-title h5">${data.name} - ${data.songAuthorName}</div>
-          <div class="card-subtitle">${data.levelAuthorName}</div>
+          <div class="card-title h5">${data.name} - ${data.author}</div>
+          <div class="card-subtitle">${data.difficulty}</div>
         </div>
         <div class="card-body">
-          <span style="color:gray">BPM: </span> ${data.bpm}<br>
-          <span style="color:gray">Scores: </span> ${data.scores}<br>
+          <span style="color:gray">Plays (Past Day): </span> ${data.plays_pastday}<br>
+          <span style="color:gray">Plays: </span> ${data.total_plays}<br>
           <span style="color:gray">Stars: </span>${data.stars}
         </div>
         <div class="card-footer">
@@ -103,7 +103,7 @@ $( document ).ready(function() {
 
 $("#submit").click(function() {
   document.getElementById('items').innerHTML = "";
-  pageNum = 0;
+  pageNum = 1;
   loadPage(pageNum);
   pageNum++;
 })
