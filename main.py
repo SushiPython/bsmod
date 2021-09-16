@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-soup = BeautifulSoup(requests.get('https://www.questboard.xyz/').text, 'html.parser')
+soup = BeautifulSoup(requests.get('https://questboard.xyz').text, 'html.parser')
 news = soup.find(id='News')
 daytexts = news.find_all(id='daytext')
 newstexts = news.find_all(id='newstext')
@@ -14,6 +14,43 @@ for i in range(0, len(daytexts)):
     "date": daytexts[i].getText(),
     "content": newstexts[i].getText()
   }
+
+
+
+@app.route('/api/ssscrape')
+def ssscrape():
+  cat = request.args.get('cat')
+  sort = request.args.get('sort')
+  star = request.args.get('minstar')
+  star1 = request.args.get('maxstar')
+  page = request.args.get('page')
+  PHPSESSID = 'mggndihftvv7rr6hm1srvt9u9l'
+  cookie_dict = {
+    'dark': '0',
+    'cat': cat,
+    'sort': sort,
+    'star': star,
+    'star1': star1,
+    'PHPSESSID': PHPSESSID
+  }
+  html = requests.get('https://scoresaber.com?page='+page, cookies=cookie_dict).text
+  soup = BeautifulSoup(html, 'html.parser')
+  songs = soup.find('tbody')
+  songs = songs.find_all('tr')
+  songJson = {}
+  for i in range(0, len(songs)):
+    songJson[i] = {
+      "image": songs[i].find("td", class_="song").find('img')['src'],
+      "name": songs[i].find("td", class_="song").find('a').getText().strip(),
+      "difficulty": songs[i].find("td", class_="difficulty").getText().strip(),
+      "author": songs[i].find("td", class_="author").find('a').getText().strip(),
+      "total_plays": songs[i].find("td", class_="scores").getText().strip(),
+      "24hr_plays": songs[i].find("td", class_="percentage").getText().strip(),
+      "stars": songs[i].find("td", class_="stars").getText().strip()
+    }
+
+  return songJson
+
 
 
 
