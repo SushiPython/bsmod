@@ -41,6 +41,7 @@
 
   function loadPage(page) {
   currentUrl = `https://bsm.sushipython.us/api/ssscrape?page=${page.toString()}&cat=${$("#sort").val()}&sort=${$("#sortorder").val()}&minStar=0&maxStar=20&verified=${$("#verified").is(':checked')}&ranked=${$("#ranked").is(':checked')}`
+  console.log(currentUrl)
   fetch(currentUrl)
   .then(response => response.json())
   .then(data => {
@@ -48,7 +49,6 @@
     for (var key in data) {
     if (data.hasOwnProperty(key)) {
       going = false;
-        console.log(key + " -> " + data[key]);
         createItem(data[key])
     }
   }
@@ -56,7 +56,7 @@
   }
 var going = false;
 $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 0 && going==false) {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10 && going==false) {
     going = true;
     loadPage(pageNum);
     pageNum++;

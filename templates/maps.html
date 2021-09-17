@@ -51,7 +51,7 @@
   }
 var going = false;
 $(window).scroll(function() {
-   if($(window).scrollTop() + $(window).height() > $(document).height() - 0 && going==false) {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10 && going==false) {
     going = true;
     loadPage(pageNum);
     pageNum++;

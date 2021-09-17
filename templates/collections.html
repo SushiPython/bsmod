@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block heading %}Hitbloq Collections{% endblock %}
+{% block content %}
+
+
+<div id="items" class="columns"></div>{% endblock %}
+{% block script %}
+<script>
+  
+  var pageNum = 0;
+  var currentUrl = '/api/maps?page='+pageNum.toString()+'&sort=Rating';
+
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+
+  function loadPage(page) {
+  fetch(currentUrl = 'https://bsm.sushipython.us/api/collections?page='+pageNum.toString())
+  .then(response => response.json())
+  .then(data => {
+    for (var key in data) {
+    if (data.hasOwnProperty(key)) {
+      going = false;
+        createItem(data[key])
+    }
+  }
+  })
+  }
+var going = false;
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10 && going==false) {
+    going = true;
+    loadPage(pageNum);
+    pageNum++;
+    console.log('end')
+   }
+});
+
+
+
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img width=300 height=66 src="${data.image}">
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.title}</div>
+        </div>
+        <div class="card-footer">
+          <a href="${data.download}" class="btn btn-link">Download</a>
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  loadPage(pageNum);
+  pageNum++;
+})
+
+
+
+
+
+</script>
+{% endblock %}

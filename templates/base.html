@@ -21,6 +21,7 @@
     <a href="/maps" class="btn btn-link">Maps</a>
     <a href="/models" class="btn btn-link">Models</a>
     <a href="/scoresaber" class="btn btn-link">ScoreSaber</a>
+    <a href="/collections" class="btn btn-link">Collections</a>
   </section>
   <section class="navbar-center">
     <img src="/static/bsmod-logo.png" width=50 height=50 style="margin-top:10px">
@@ -39,7 +40,7 @@
       <h1>{% block heading %}{% endblock %}</h1>
     </div>
   </div>
-  {% block content %}{% endblock %}<div style="text-align:center"><div class="loading loading-lg"></div>This may take a bit due to ratelimits...</div>
+  {% block content %}{% endblock %}<div class="gone" style="text-align:center"><div class="loading loading-lg"></div>Loading...</div>
 </div>
 </body>
 </html>

@@ -16,6 +16,24 @@ for i in range(0, len(daytexts)):
   }
 
 
+@app.route('/collections')
+def collections():
+  return render_template('collections.html')
+
+@app.route('/api/collections')
+def apicollections():
+  page = request.args.get('page')
+  html = requests.get('https://hitbloq.com/map_pools/'+page).text
+  soup = BeautifulSoup(html, 'html.parser')
+  collections = soup.find_all("div", {"class": "ranked-lists-entry-container"})
+  colljson = {}
+  for i in range(0, len(collections)):
+    colljson[i] = {
+      "download": "https://hitbloq.com"+collections[i].find("a", {"class": "hashlist-download"})['href'],
+      "image": collections[i].find("img", {"class": "ranked-lists-entry-img"})['src'],
+      "title": collections[i].find("div", {"class": "ranked-lists-entry-title"}).getText()
+    }
+  return colljson
 
 @app.route('/api/ssscrape')
 def ssscrape():
@@ -46,9 +64,7 @@ def ssscrape():
     'ranked': ranked
   }
   req_u_1 = f'https://scoresaber.com/imports/user-setting.php?verified={verified}&ranked={ranked}&sort={sort}&cat={cat}&star={star}&star1={star1}'
-  print(req_u_1)
   requests.get(req_u_1)
-  print(cookie_dict)
   html = requests.get('https://scoresaber.com?page='+page, cookies=cookie_dict).text
   soup = BeautifulSoup(html, 'html.parser')
   songs = soup.find('tbody')
