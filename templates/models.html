@@ -5,7 +5,7 @@
 <div class="input-group">
   <div class="form-group">
   <select id="sort" class="form-select">
-    <option value="date">Latest</option>
+    <option value="date">Date</option>
     <option value="name">Name</option>
     <option value="author">Author</option>
   </select>
@@ -19,6 +19,13 @@
     <option value="avatar">Avatar</option>
   </select>
 </div>
+  <div class="form-group">
+  <select id="sortorder" class="form-select">
+    <option value="asc">Ascending</option>
+    <option value="desc">Descending</option>
+  </select>
+</div>
+
   <input id="searchquery" type="text" class="form-input" placeholder="Search">
   <button id="submit" class="btn input-group-btn">Search</button>
 </div>
@@ -28,8 +35,7 @@
 <script>
   
   var pageNum = 0;
-  var currentUrl = '/api/models?page='+pageNum.toString()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
-
+  var currentUrl;
   function timeToDate(item) {
     var newDate = Date.parse(item);
     return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
@@ -37,7 +43,7 @@
 
 
   function loadPage(page) {
-  currentUrl = '/api/models?page='+pageNum.toString()+'&type='+$("#sortmodel").val()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val();
+  currentUrl = '/api/models?page='+pageNum.toString()+'&type='+$("#sortmodel").val()+'&sort='+$("#sort").val()+'&query='+$("#searchquery").val()+'&direction='+document.getElementById('sortorder').value;
   fetch(currentUrl)
   .then(response => response.json())
   .then(data => {
