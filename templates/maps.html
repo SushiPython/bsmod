@@ -2,7 +2,7 @@
 {% block heading %}Beat Saber Maps{% endblock %}
 {% block content %}
 
-<div class="input-group">
+<div class="input-group" style="margin-left: auto;margin-right: auto;width:50%">
   <label class="form-checkbox form-inline">
     <input id="noodle" type="checkbox"><i class="form-icon"></i> Noodle
   </label>
@@ -19,8 +19,8 @@
     <option value="Relevance">Relevance</option>
   </select>
 </div>
-  <input id="searchquery" type="text" class="form-input" placeholder="Search">
-  <button id="submit" class="btn input-group-btn">Search</button>
+  <input id="searchquery" type="text" class="form-input bg-black" placeholder="Search Query...">
+  <button id="submit" class="btn bg-black input-group-btn">Search</button>
 </div>
 
 <div id="items" class="columns"></div>{% endblock %}

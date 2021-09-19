@@ -15,16 +15,17 @@
     <meta content="#43B581" data-react-helmet="true" name="theme-color" />
 </head>
 <body>
-<header class="navbar">
+<header class="navbar gradient" style="padding:.4em;margin:1em;">
   <section class="navbar-section">
-    <a href="/" class="btn btn-link">Home</a>
-    <a href="/maps" class="btn btn-link">Maps</a>
-    <a href="/models" class="btn btn-link">Models</a>
-    <a href="/scoresaber" class="btn btn-link">ScoreSaber</a>
-    <a href="/collections" class="btn btn-link">Collections</a>
+    <a href="/" class="btn bg-black">Home</a>
+    <a href="/maps" class="btn bg-black">Maps</a>
+    <a href="/models" class="btn bg-black">Models</a>
+    <a href="/scoresaber" class="btn bg-black">ScoreSaber</a>
+    <a href="/collections" class="btn bg-black">Collections</a>
+    <a href="/mods" class="btn bg-black">Mods (SOON)</a>
   </section>
-  <section class="navbar-center">
-    <img src="/static/bsmod-logo.png" width=50 height=50 style="margin-top:10px">
+  <section class="navbar-center" style="padding:.3em;white-space:pre-wrap;">
+    <img src="/static/bsmod-logo.png" width=50 height=50><span>  Beat Saber Modding</span>
   </section>
   <section class="navbar-section">
     <a href="/socials" class="btn btn-link">Socials</a>
@@ -32,9 +33,6 @@
   </section>
 </header>
 <div class="container">
-  <div class="text-center text-muted">
-    Beat Saber Modding
-  </div>
     <div class="hero-sm bg-gray text-center">
     <div class="hero-body">
       <h1>{% block heading %}{% endblock %}</h1>
@@ -76,5 +74,17 @@
   }
   .none {
     display: none;
+  }
+  .bg-black {
+    background: #050401!important;
+    border: 2px solid black;
+    margin-left: .5em;
+    color: #16e1ae;
+  }
+  .gradient {
+    background: #011627;
+  }
+  .round-corners {
+    border-radius: 3px;
   }
 </style>
