@@ -72,7 +72,9 @@ $(window).scroll(function() {
     if (img.src != '/static/nip.png' && type != 'bloq') {
       img.src = '/static/nip.png';
     }
-    if (type == 'bloq') {
+    if (thumbnail.startsWith('h')) {
+      img.src = thumbnail;
+    } else if (type == 'bloq') {
       img.src = thumbnail;
     }
   }
@@ -80,7 +82,7 @@ $(window).scroll(function() {
     $(`
       <div class="card text-center block cextra column">
         <div class="card-image p-center">
-          <img alt="Saber Thumbnail" onerror="fiximg(this,'${data.type}', '${data.thumbnail}');" width=200 height=200 src="https://modelsaber.com/files/${data.type}/${data.id}/${data.thumbnail}">
+          <img height=256 width=256 alt="Loading image" onerror="fiximg(this,'${data.type}', '${data.thumbnail}');" width=200 height=200 src="https://modelsaber.com/files/${data.type}/${data.id}/${data.thumbnail}">
         </div>
         <div class="card-header">
           <div class="card-title h5">${data.name}</div>

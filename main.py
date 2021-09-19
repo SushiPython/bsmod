@@ -127,7 +127,7 @@ def apimodels():
   page = int(request.args.get('page'))
   modeltype = request.args.get('type')
   direction = request.args.get('direction')
-  req_url = f'https://modelsaber.com/api/v2/get.php?type={modeltype}&sort={sort}&filter={query}&start={page*25}&end={(page+1)*28}&sortDirection={direction}'
+  req_url = f'https://modelsaber.com/api/v2/get.php?type={modeltype}&sort={sort}&filter={query}&start={page*26}&end={(page+1)*26}&sortDirection={direction}'
   print(req_url)
   r = requests.get(req_url)
   return r.json()
