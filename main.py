@@ -5,14 +5,18 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 
 soup = BeautifulSoup(requests.get('https://questboard.xyz').text, 'html.parser')
+for br in soup.find_all("br"):
+  br.replace_with("\n")
 news = soup.find(id='News')
 daytexts = news.find_all(id='daytext')
 newstexts = news.find_all(id='newstext')
+titletexts = news.find_all(id='newstitle')
 newsjson = {}
 for i in range(0, len(daytexts)):
   newsjson[i] = {
     "date": daytexts[i].getText(),
-    "content": newstexts[i].getText()
+    "content": newstexts[i].getText(),
+    "title": titletexts[i].getText()
   }
 
 
@@ -96,8 +100,8 @@ def noticeboard():
 def main():
   out_html = ''
   for item in newsjson:
-    out_html += f'<span><strong>{newsjson[item]["date"]}:</strong> {newsjson[item]["content"]}</span><br><hr>'
-  return render_template('index.html', board=out_html)
+    out_html += f'<span><strong>{newsjson[item]["title"]}</strong><br><span style="color:#FDFFFC">{newsjson[item]["date"]}</span><br><br> {newsjson[item]["content"]}</span><br><hr>'
+  return render_template('testing.html', board=out_html)
 
 
 @app.route('/api/maps')
@@ -144,7 +148,7 @@ def apiscoresaber():
 
 @app.route('/api/downloadscoresaber')
 def downloadscoresaber():
-  url = f"https://beatsaver.com/api/search/text/0?q={request.args.get('name')}&minBpm={request.args.get('bpm')}&maxBpm={request.args.get('bpm')}"
+  url = f"https://beatsaver.com/api/search/text/0?q={request.args.get('name')}"
   r = requests.get(url)
   id = r.json()['docs'][0]['id']
   print(id)
