@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block heading %}Qosmetics Models{% endblock %}
+{% block content %}
+
+<div class="input-group" style="margin-left: auto;margin-right: auto;width:50%">
+  <div class="form-group">
+  <select id="sort" class="form-select">
+    <option value="date">Date</option>
+    <option value="name">Name</option>
+    <option value="author">Author</option>
+  </select>
+</div>
+  <div class="form-group">
+  <select id="sortmodel" class="form-select">
+    <option value="all">All</option>
+    <option value="saber">Saber</option>
+    <option value="bloq">Blocks</option>
+    <option value="platform">Platforms</option>
+    <option value="avatar">Avatar</option>
+  </select>
+</div>
+  <div class="form-group">
+  <select id="sortorder" class="form-select">
+    <option value="asc">Ascending</option>
+    <option value="desc">Descending</option>
+  </select>
+</div>
+
+  <input id="searchquery" type="text" class="form-input bg-black" placeholder="Search">
+  <button id="submit" class="btn input-group-btn bg-black">Search</button>
+</div>
+
+<div id="items" class="columns"></div>{% endblock %}
+{% block script %}
+<script>
+  
+  var pageNum = 0;
+  var currentUrl;
+  function timeToDate(item) {
+    var newDate = Date.parse(item);
+    return new Date(newDate).toISOString().slice(0, 19).replace('T', ' ');
+  }
+
+
+  function loadPage(page) {
+  currentUrl = '/api/qosmetics?page='+pageNum
+  fetch(currentUrl)
+  .then(response => response.json())
+  .then(data => {
+    $("#load").hide();
+    for (var key in data.data) {
+    if (data.data.hasOwnProperty(key)) {
+      going = false;
+        console.log(key + " -> " + data[key]);
+        createItem(data.data[key])
+    }
+}
+  })
+  }
+
+var going = false;
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 10 && going==false) {
+    going = true;
+    loadPage(pageNum);
+    pageNum++;
+    console.log('end')
+   }
+});
+
+
+  function createItem(data) {
+    $(`
+      <div class="card text-center block cextra column">
+        <div class="card-image p-center">
+          <img height=256 width=256 onerror='this.src="/static/nip.png"' src="${data.image}"></img>
+        </div>
+        <div class="card-header">
+          <div class="card-title h5">${data.name}</div>
+          <div class="card-subtitle">${data.author}</div>
+        </div>
+        <div class="card-body">
+          <span style="color:gray">Uploaded: </span> ${data.time}<br>
+          <span style="color:gray">Tags: </span>${data.tags}
+        </div>
+        <div class="card-footer">
+          <a href="${data.download}" class="btn btn-link">Download</a>
+        </div>
+      </div>
+    `).appendTo('#items');
+  }
+
+
+$( document ).ready(function() {
+  loadPage(pageNum);
+  pageNum = pageNum + 1;
+});
+
+
+$("#submit").click(function() {
+  document.getElementById('items').innerHTML = "";
+  pageNum = 0;
+  loadPage(pageNum);
+  pageNum++;
+})
+
+
+
+
+
+</script>
+{% endblock %}

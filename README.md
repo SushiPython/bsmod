@@ -10,7 +10,6 @@ My goal is to combine ModelSaber, BeatSaver, and some guides into a simple, easy
 ![BSM Logo](/static/bsmod-logo.png)
 
 ## TODO:
-- Qosmetics integration with models somehow???
 - Click on models and maps for its own page with more data
 - Mods page with beatmods api
 - scoresaber and hitbloq leaderboards

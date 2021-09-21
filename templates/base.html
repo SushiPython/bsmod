@@ -7,12 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BSMod</title>
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <title>BSMod</title>
-    <meta content="BSMod" property="og:title" />
-    <meta content="Beat Saber Maps, Models, Rankings, and more all in one place!" property="og:description" />
-    <meta content="https://bsm.sushipython.us" property="og:url" />
-    <meta content="https://bsm.sushipython.us/static/bsmod-logo.png" property="og:image" />
-    <meta content="#43B581" data-react-helmet="true" name="theme-color" />
+  <meta content="BSMod" property="og:title" />
+  <meta content="Beat Saber Maps, Models, Rankings, and more all in one place!" property="og:description" />
+  <meta content="https://bsm.sushipython.us" property="og:url" />
+  <meta content="https://bsm.sushipython.us/static/bsmod-logo.png" property="og:image" />
+  <meta content="#43B581" data-react-helmet="true" name="theme-color" />
 </head>
 <body>
 <header class="navbar gradient" style="padding:.4em;margin:1em;">
@@ -28,8 +27,8 @@
     <img src="/static/bsmod-logo.png" width=50 height=50><span>  Beat Saber Modding</span>
   </section>
   <section class="navbar-section">
-    <a href="/socials" class="btn btn-link">Socials</a>
-    <a href="https://github.com/SushiPython/bsmod" class="btn btn-link">GitHub</a>
+    <a href="/socials" class="btn bg-black">Socials</a>
+    <a href="https://github.com/SushiPython/bsmod" class="btn bg-black">GitHub</a>
   </section>
 </header>
 <div class="container">
@@ -86,5 +85,49 @@
   }
   .round-corners {
     border-radius: 3px;
+  }
+  a.link::before {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/OOjs_UI_icon_external-link-ltr-invert.svg/1200px-OOjs_UI_icon_external-link-ltr-invert.svg.png");
+    background-size: contain;
+    position: relative;
+    display: inline-block;
+    content: ' ';
+    width: 1.25em;
+    height: 1.25em;
+    top: .3em;
+    left: -.3em;
+  }
+  a.discord::before {
+    background-image: url("https://cdn-icons-png.flaticon.com/512/2111/2111370.png");
+    background-size: contain;
+    position: relative;
+    display: inline-block;
+    content: ' ';
+    width: 1.25em;
+    height: 1.25em;
+    top: .3em;
+    left: -.3em;
+  }
+  a.wiki::before {
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Tango_style_Wikipedia_Icon.svg/1024px-Tango_style_Wikipedia_Icon.svg.png");
+    background-size: contain;
+    position: relative;
+    display: inline-block;
+    content: ' ';
+    width: 1.25em;
+    height: 1.25em;
+    top: .3em;
+    left: -.3em;
+  }
+  a.video::before {
+    background-image: url("https://www.iconpacks.net/icons/2/free-youtube-logo-icon-2431-thumb.png");
+    background-size: contain;
+    position: relative;
+    display: inline-block;
+    content: ' ';
+    width: 1.25em;
+    height: 1.25em;
+    top: .3em;
+    left: -.3em;
   }
 </style>

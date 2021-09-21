@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 import requests
 from bs4 import BeautifulSoup
+import json
+import pymongo
+import os
 
 app = Flask(__name__)
 
@@ -19,6 +22,30 @@ for i in range(0, len(daytexts)):
     "title": titletexts[i].getText()
   }
 
+mdb = pymongo.MongoClient(f"mongodb://dbUser:{os.environ['mdbt']}@cluster0-shard-00-00.gjopl.mongodb.net:27017,cluster0-shard-00-01.gjopl.mongodb.net:27017,cluster0-shard-00-02.gjopl.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-10ra3i-shard-0&authSource=admin&retryWrites=true&w=majority")
+db = mdb.models.data
+
+@app.route('/api/qosmetics')
+def apiqosmetics():
+  items = []
+  page = request.args.get('page')
+  for i in db.find({}).skip(int(page)*25).limit((int(page)+1)*25):
+    items.append({
+      "type": i['type'],
+      "author": i['author'],
+      "name": i['name'],
+      "image": i['image'],
+      "tags": i['tags'],
+      "download": i['download'],
+      "time": i['time'],
+    })
+  return {
+    "data": items
+  }
+
+@app.route('/qosmetics')
+def qosmetics():
+  return render_template('qosmetics.html')
 
 @app.route('/collections')
 def collections():
