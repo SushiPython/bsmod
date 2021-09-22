@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import json
 import pymongo
 import os
+import re
 
 app = Flask(__name__)
 
@@ -29,7 +30,20 @@ db = mdb.models.data
 def apiqosmetics():
   items = []
   page = request.args.get('page')
-  for i in db.find({}).skip(int(page)*25).limit((int(page)+1)*25):
+  query = request.args.get('query')
+  typeModel = request.args.get('type')
+  direction = request.args.get('direction')
+  if direction == "asc":
+    sdn = 1
+  else:
+    sdn = -1
+  search_item = {}
+  if typeModel != "all":
+    search_item['type'] = typeModel
+  if query:
+    search_item['name_lower'] = {"$regex": query.lower()}
+  data = db.find(search_item).sort("time", sdn).skip(int(page)*25).limit((int(page)+1)*25)
+  for i in data:
     items.append({
       "type": i['type'],
       "author": i['author'],
@@ -39,6 +53,7 @@ def apiqosmetics():
       "download": i['download'],
       "time": i['time'],
     })
+  print(items)
   return {
     "data": items
   }
