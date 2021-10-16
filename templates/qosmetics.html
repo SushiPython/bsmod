@@ -68,7 +68,7 @@ $(window).scroll(function() {
           <img height=256 width=256 onerror='this.src="/static/nip.png"' src="${data.image}"></img>
         </div>
         <div class="card-header">
-          <div class="card-title h5">${data.name}</div>
+          <div style="word-wrap: break-word;" class="card-title h5">${data.name}</div>
           <div class="card-subtitle">${data.author}</div>
         </div>
         <div class="card-body">
@@ -77,6 +77,7 @@ $(window).scroll(function() {
         </div>
         <div class="card-footer">
           <a href="${data.download}" class="btn btn-link">Download</a>
+          <a href="/page/questmodel?name=${data.name}" class="btn btn-link">View Page</a>
         </div>
       </div>
     `).appendTo('#items');

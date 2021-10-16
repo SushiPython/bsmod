@@ -58,6 +58,40 @@ def apiqosmetics():
     "data": items
   }
 
+@app.route('/page/pcmodel')
+def pagepcmodel():
+  modelid = request.args.get('id')
+  d = requests.get(f'https://modelsaber.com/api/v2/get.php?filter=id:{modelid}').json()[modelid]
+  data = {
+    'name': d['name'],
+    'content': f'''
+    <span><strong>Type: </strong>{d['type']}</span><br>
+    <span><strong>Author: </strong>{d['author']}</span><br>
+    <span><strong>Date: </strong>{d['date']}</span><br>
+    <span><a href="{d['download']}"><strong>Download</strong></a></span><br>
+    <span><a href="{d['install_link']}"><strong>OneClick</strong></a></span><br>
+    ''',
+    'img': d['thumbnail']
+  }
+  return render_template('page.html', data=data)
+
+@app.route('/page/questmodel')
+def pagequestmodel():
+  modelid = request.args.get('name').lower()
+  d = db.find_one({"name_lower": modelid})
+  data = {
+    'name': d['name'],
+    'content': f'''
+    <span><strong>Type: </strong>{d['type']}</span><br>
+    <span><strong>Author: </strong>{d['author']}</span><br>
+    <span><strong>Date: </strong>{d['time']}</span><br>
+    <span><strong>Tags: </strong>{d['tags']}</span><br>
+    <span><a href="{d['download']}"><strong>Download</strong></a></span><br>
+    ''',
+    'img': d['image']
+  }
+  return render_template('page.html', data=data)
+
 @app.route('/qosmetics')
 def qosmetics():
   return render_template('qosmetics.html')

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block heading %}{{data.name}}{% endblock %}
+{% block content %}
+<div class="columns">
+
+  <div class="column round-corners gradient" style="margin:1em">
+    <div class="columns">
+      <div class="column"><img height=512 width=512 src="{{data.img}}"></div>
+      <div class="column">
+    <div style="height:60vh;overflow-y:auto;white-space:pre-wrap;padding:.3em;font-size:30px;">{{data.content|safe}}</div>
+  </div></div>
+
+
+
+
+<style>
+.gone {
+  display: none;
+}
+</style>
+{% endblock %}
