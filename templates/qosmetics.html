@@ -52,7 +52,7 @@
           } else if (data.data[key].image.includes("youtu.be") || data.data[key].image.includes("youtube")) {
             data.data[key].imgvid = `<iframe src="https://www.youtube.com/embed/${data.data[key].image.split('/')[3]}?mute=1&autoplay=1" width="256" height="256" frameborder="0" allow="fullscreen"></iframe>`
           } else {
-            data.data[key].imgvid = `<video width="256" height="256" autoplay loop><source src="${data.data[key].image}"></video>`
+            data.data[key].imgvid = `<video muted width="256" height="256" autoplay loop><source src="${data.data[key].image}"></video>`
           }
         }
         createItem(data.data[key])
