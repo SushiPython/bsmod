@@ -44,11 +44,21 @@
     if (data.data.hasOwnProperty(key)) {
       going = false;
         console.log(key + " -> " + data[key]);
+          if (data.data[key].image.split('?')[0].match(/\.(jpeg|jpg|gif|png)$/) != null) {
+            data.data[key].imgvid = `<img height=256 width=256 onerror='this.src="/static/nip.png"' src="${data.data[key].image}"></img>`
+            
+          } else if (data.data[key].image.includes("streamable")) {
+            data.data[key].imgvid = `<iframe src="https://streamable.com/e/${data.data[key].image.split('/')[3]}?muted=1&autoplay=1" width="256" height="256" frameborder="0" allow="fullscreen"></iframe>`
+          } else if (data.data[key].image.includes("youtu.be") || data.data[key].image.includes("youtube")) {
+            data.data[key].imgvid = `<iframe src="https://www.youtube.com/embed/${data.data[key].image.split('/')[3]}?mute=1&autoplay=1" width="256" height="256" frameborder="0" allow="fullscreen"></iframe>`
+          } else {
+            data.data[key].imgvid = `<video width="256" height="256" autoplay loop><source src="${data.data[key].image}"></video>`
+          }
+        }
         createItem(data.data[key])
     }
-}
-  })
-  }
+})}
+
 
 var going = false;
 $(window).scroll(function() {
@@ -65,7 +75,7 @@ $(window).scroll(function() {
     $(`
       <div class="card text-center block cextra column">
         <div class="card-image p-center">
-          <img height=256 width=256 onerror='this.src="/static/nip.png"' src="${data.image}"></img>
+          ${data.imgvid}
         </div>
         <div class="card-header">
           <div style="word-wrap: break-word;" class="card-title h5">${data.name}</div>

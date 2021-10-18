@@ -5,6 +5,7 @@ import json
 import pymongo
 import os
 import re
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -22,6 +23,9 @@ for i in range(0, len(daytexts)):
     "content": newstexts[i].getText(),
     "title": titletexts[i].getText()
   }
+
+
+
 
 mdb = pymongo.MongoClient(f"mongodb://dbUser:{os.environ['mdbt']}@cluster0-shard-00-00.gjopl.mongodb.net:27017,cluster0-shard-00-01.gjopl.mongodb.net:27017,cluster0-shard-00-02.gjopl.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-10ra3i-shard-0&authSource=admin&retryWrites=true&w=majority")
 db = mdb.models.data
@@ -84,11 +88,14 @@ def pagequestmodel():
     'content': f'''
     <span><strong>Type: </strong>{d['type']}</span><br>
     <span><strong>Author: </strong>{d['author']}</span><br>
-    <span><strong>Date: </strong>{d['time']}</span><br>
+    <span><strong>Date: </strong>{datetime.utcfromtimestamp(int(d['time'])).strftime('%Y-%m-%d %H:%M:%S')}</span><br>
     <span><strong>Tags: </strong>{d['tags']}</span><br>
     <span><a href="{d['download']}"><strong>Download</strong></a></span><br>
     ''',
-    'img': d['image']
+    'img': d['image'],
+    'author': d['author'],
+    'tags': d['tags']
+    
   }
   return render_template('page.html', data=data)
 
@@ -102,11 +109,11 @@ def collections():
 
 @app.route('/api/collections')
 def apicollections():
+  colljson = {}
   page = request.args.get('page')
-  html = requests.get('https://hitbloq.com/map_pools/'+page).text
+  html = requests.get('https://hitbloq.com/map_pools/'+str(page)).text
   soup = BeautifulSoup(html, 'html.parser')
   collections = soup.find_all("div", {"class": "ranked-lists-entry-container"})
-  colljson = {}
   for i in range(0, len(collections)):
     colljson[i] = {
       "download": "https://hitbloq.com"+collections[i].find("a", {"class": "hashlist-download"})['href'],

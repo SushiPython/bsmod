@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 {% block heading %}{{data.name}}{% endblock %}
+  {% block embed %}
+  <meta content="BSMod | {{data.name}} by {{data.author}}" property="og:title" />
+  <meta content="Beat Saber Maps, Models, Rankings, and more all in one place!
+  Tags: {{data.tags}}" property="og:description" />
+  <meta content="https://bsm.sushipython.us" property="og:url" />
+  <meta content="{{data.img}}" property="og:image" />
+  <meta content="#43B581" data-react-helmet="true" name="theme-color" />
+  {% endblock %}
 {% block content %}
 <div class="columns">
 

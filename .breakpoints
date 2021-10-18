@@ -1,5 +1,21 @@
 {
   "files": {
+    "main.py": [
+      {
+        "id": "0fe9b9f0-2380-4ad7-8e2b-2884cb53bf24",
+        "line": 113,
+        "version": 9551,
+        "index": 3394
+      }
+    ],
+    "templates/base.html": [
+      {
+        "id": "7651e36c-134e-4fff-9552-40a2ec0762ac",
+        "line": 17,
+        "version": 1823,
+        "index": 793
+      }
+    ],
     "templates/index.html": [
       {
         "id": "7b3dec1d-adf8-4ae7-87a5-c2972a8c5dff",
