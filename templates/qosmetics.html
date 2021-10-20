@@ -79,7 +79,7 @@ $(window).scroll(function() {
         </div>
         <div class="card-header">
           <div style="word-wrap: break-word;" class="card-title h5">${data.name}</div>
-          <div class="card-subtitle">${data.author}</div>
+          <div class="card-subtitle">${data.type} by ${data.author}</div>
         </div>
         <div class="card-body">
           <span style="color:gray">Uploaded: </span> ${new Date(data.time*1000).toLocaleTimeString("en-US")} ${new Date(data.time*1000).toLocaleDateString("en-US")}<br>
